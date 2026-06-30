@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio — Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --red:#D14B3F;
+    --red-deep:#A8281F;
+    --coral:#E8866F;
+    --ochre:#D99A4E;
+    --cream:#FBF3E7;
+    --ink:#241B14;
+    --white:#FFFFFF;
+    --line: rgba(36,27,20,0.13);
+    --mono: 'IBM Plex Mono', monospace;
+    --display: 'Fraunces', serif;
+    --body: 'Inter', sans-serif;
+    --sidebar-w: 230px;
+    --r: 18px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0; background:var(--cream); color:var(--ink);
+    font-family:var(--body); -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--red); color:var(--cream);}
+  a{color:inherit;}
+
+  #ruler{
+    position:fixed; left:0; right:0; height:2px; background:var(--red);
+    top:0; pointer-events:none; z-index:9999; opacity:0.28; border-radius:2px;
+  }
+  #ruler::before{
+    content: ''; position:absolute; right:14px; top:-5px; width:12px; height:12px;
+    background:var(--red); border-radius:50%;
+  }
+  @media (max-width:860px){ #ruler{display:none;} }
+
+  aside{
+    position:fixed; top:0; left:0; bottom:0; width:var(--sidebar-w);
+    background:var(--white);
+    display:flex; flex-direction:column; justify-content:space-between;
+    padding:30px 24px; z-index:400; border-radius:0 28px 28px 0;
+    box-shadow: 4px 0 24px rgba(36,27,20,0.05);
+  }
+  .brand{ font-family:var(--display); font-weight:700; font-size:1.25rem; line-height:1.15; cursor:pointer; }
+  .brand .dot{color:var(--red);}
+  .brand-role{
+    font-family:var(--mono); font-size:0.62rem; text-transform:uppercase; letter-spacing:.06em;
+    color:var(--red-deep); margin-top:10px; background:rgba(209,75,63,0.1); display:inline-block;
+    padding:5px 10px; border-radius:20px;
+  }
+
+  nav{margin-top:50px;}
+  nav ol{list-style:none; margin:0; padding:0;}
+  nav a{
+    display:flex; align-items:center; gap:10px;
+    font-family:var(--display); font-weight:500; font-size:1rem;
+    text-decoration:none; color:rgba(36,27,20,0.45);
+    padding:11px 14px; border-radius:14px; margin-bottom:4px;
+    transition:all .2s;
+  }
+  nav a:hover{color:var(--ink); background:rgba(36,27,20,0.04);}
+  nav a.active{color:var(--white); background:var(--red);}
+  nav a .emoji{font-size:1rem;}
+
+  .sidebar-foot{font-family:var(--mono); font-size:0.62rem; color:rgba(36,27,20,0.45); line-height:1.8;}
+  .sidebar-foot .loc{color:var(--red-deep); font-weight:600;}
+
+  #menu-toggle{display:none;}
+  @media (max-width:860px){
+    aside{
+      width:100%; height:auto; bottom:auto; flex-direction:row; align-items:center;
+      justify-content:space-between; padding:14px 5vw; border-radius:0;
+      position:fixed; z-index:600;
+    }
+    nav{margin-top:0; position:fixed; top:64px; left:0; right:0; background:var(--white);
+        border-radius:0 0 24px 24px; max-height:0; overflow:hidden; transition:max-height .25s; box-shadow:0 10px 24px rgba(36,27,20,0.08);}
+    nav.open{max-height:360px;}
+    nav ol{padding:10px 5vw 16px;}
+    .sidebar-foot{display:none;}
+    #menu-toggle{display:block; font-family:var(--mono); font-size:0.7rem; text-transform:uppercase; background:var(--red); color:var(--cream); border:none; padding:8px 16px; border-radius:20px; cursor:pointer;}
+  }
+
+  main{margin-left:var(--sidebar-w);}
+  @media (max-width:860px){ main{margin-left:0; padding-top:64px;} }
+
+  .view{display:none;}
+  .view.active{display:block; animation:fadeIn .45s ease;}
+  @keyframes fadeIn{from{opacity:0;} to{opacity:1;}}
+
+  section{padding:6vh 5.5vw;}
+  .index-no{
+    font-family:var(--mono); font-size:0.72rem; color:var(--red-deep); letter-spacing:.08em;
+    text-transform:uppercase; margin-bottom:16px; display:inline-flex; align-items:center; gap:8px;
+    background:rgba(209,75,63,0.1); padding:6px 12px; border-radius:20px;
+  }
+
+  /* ---------- HOME ---------- */
+  .hero{padding-bottom:5vh;}
+  .hero-row{display:grid; grid-template-columns:1fr 230px; gap:40px; align-items:center;}
+  .hero h1{
+    font-family:var(--display); font-weight:600; font-size:clamp(2.5rem,5.6vw,4.4rem);
+    line-height:1.08; margin:0 0 22px; letter-spacing:-0.01em;
+  }
+  .hero h1 em{font-style:italic; font-weight:600; color:var(--red-deep); position:relative;}
+  .hero p.sub{font-size:1.08rem; max-width:540px; color:rgba(36,27,20,0.72); line-height:1.65; margin-bottom:24px;}
+  .discipline-tags{display:flex; gap:10px; flex-wrap:wrap;}
+  .tag{
+    font-family:var(--mono); font-size:0.72rem; letter-spacing:.04em; text-transform:uppercase;
+    padding:9px 16px; border-radius:20px; background:var(--white); border:1px solid var(--line);
+  }
+  .tag.primary{color:var(--white); background:var(--red); border-color:var(--red); font-weight:500;}
+  .hero-photo{
+    aspect-ratio:1/1; border-radius:28px; background:var(--white); border:2px dashed var(--line);
+    display:flex; align-items:center; justify-content:center; flex-direction:column; gap:8px;
+    font-family:var(--mono); font-size:0.62rem; text-transform:uppercase; letter-spacing:.04em;
+    color:rgba(36,27,20,0.4); text-align:center; cursor:pointer; transition:transform .2s, border-color .2s;
+  }
+  .hero-photo:hover{border-color:var(--red); transform:rotate(-2deg);}
+  @media (max-width:760px){.hero-row{grid-template-columns:1fr;} .hero-photo{max-width:180px;}}
+
+  .stats-wrap{display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:14px;}
+  .stat-card{
+    background:var(--white); border-radius:18px; padding:20px 22px;
+    border:1px solid var(--line); transition:transform .2s;
+  }
+  .stat-card:hover{transform:translateY(-3px);}
+  .stat-card .num{font-family:var(--display); font-weight:700; font-size:1.7rem; color:var(--red);}
+  .stat-card .label{font-family:var(--body); font-size:0.78rem; color:rgba(36,27,20,0.62); margin-top:4px; line-height:1.4;}
+
+  .work-intro{max-width:680px; margin-bottom:36px;}
+  .work-intro h2{font-family:var(--display); font-weight:600; font-size:clamp(1.8rem,3.2vw,2.5rem); margin:0 0 14px; letter-spacing:-0.01em;}
+
+  /* ---------- WORK tiles (friendly, rounded, not a stiff ledger) ---------- */
+  .tiles{display:flex; flex-direction:column; gap:14px;}
+  .tile{
+    background:var(--white); border-radius:22px; padding:26px 28px;
+    display:flex; gap:22px; align-items:center; cursor:pointer;
+    border:1px solid var(--line); transition:transform .2s, box-shadow .2s;
+  }
+  .tile:hover{transform:translateY(-3px); box-shadow:0 14px 30px rgba(36,27,20,0.08); border-color:transparent;}
+  .tile .badge{
+    width:54px; height:54px; border-radius:16px; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--display); font-weight:700; font-size:1.2rem; color:var(--white);
+  }
+  .tile .info{flex:1; min-width:0;}
+  .tile h3{font-family:var(--display); font-weight:600; font-size:clamp(1.15rem,2vw,1.4rem); margin:0 0 6px;}
+  .tile .desc{font-size:0.88rem; color:rgba(36,27,20,0.6); line-height:1.5; max-width:560px;}
+  .tile .chips{display:flex; gap:8px; margin-top:10px; flex-wrap:wrap;}
+  .tile .chips span{
+    font-family:var(--mono); font-size:0.66rem; text-transform:uppercase; letter-spacing:.04em;
+    background:rgba(36,27,20,0.05); padding:4px 10px; border-radius:14px; color:rgba(36,27,20,0.6);
+  }
+  .tile .go{font-family:var(--display); font-size:1.5rem; color:var(--red); transition:transform .2s;}
+  .tile:hover .go{transform:translateX(6px);}
+  @media (max-width:600px){ .tile{flex-wrap:wrap;} .tile .go{display:none;} }
+
+  /* ---------- MY STORY: hero ---------- */
+  .story-hero-img{
+    width:100%; aspect-ratio:16/7; border-radius:26px; background:var(--white);
+    border:2px dashed var(--line); display:flex; align-items:center; justify-content:center;
+    flex-direction:column; gap:10px; font-family:var(--mono); font-size:0.7rem;
+    text-transform:uppercase; letter-spacing:.04em; color:rgba(36,27,20,0.4);
+    cursor:pointer; margin-bottom:36px; transition:border-color .2s;
+  }
+  .story-hero-img:hover{border-color:var(--red);}
+  .story-headline{margin:0 0 14px; line-height:1.18;}
+  .story-headline span{display:inline-block; margin-right:0.22em;}
+  .sz-a{font-family:var(--mono); font-size:0.85rem; text-transform:uppercase; letter-spacing:.08em; color:var(--red-deep); vertical-align:middle;}
+  .sz-b{font-family:var(--display); font-weight:400; font-style:italic; font-size:clamp(1.6rem,3.4vw,2.6rem); color:rgba(36,27,20,0.7);}
+  .sz-c{font-family:var(--display); font-weight:700; font-size:clamp(2.6rem,6.5vw,4.8rem); color:var(--ink);}
+  .sz-d{font-family:var(--display); font-weight:600; font-size:clamp(2rem,4.4vw,3.2rem); color:var(--red);}
+  .sz-e{font-family:var(--body); font-weight:600; font-size:clamp(1.1rem,2vw,1.5rem); color:rgba(36,27,20,0.55);}
+  .story-hero-sub{font-size:1.05rem; line-height:1.7; color:rgba(36,27,20,0.72); max-width:620px; margin-bottom:50px;}
+
+  /* ---------- MY STORY: early life (polaroid stack) ---------- */
+  .early-life{display:grid; grid-template-columns:340px 1fr; gap:50px; align-items:start; padding-bottom:6vh; border-bottom:1px solid var(--line); margin-bottom:6vh;}
+  .polaroid-stack{position:relative; height:420px;}
+  .polaroid{
+    position:absolute; width:230px; background:var(--white); padding:14px 14px 38px;
+    border-radius:6px; box-shadow:0 10px 24px rgba(36,27,20,0.18);
+    cursor:pointer; transition:transform .25s, box-shadow .25s; z-index:1;
+  }
+  .polaroid:hover{transform:scale(1.05) rotate(0deg) !important; box-shadow:0 18px 34px rgba(36,27,20,0.26); z-index:10;}
+  .polaroid .frame{
+    aspect-ratio:1/1; background:var(--cream); border:2px dashed var(--line);
+    display:flex; align-items:center; justify-content:center; flex-direction:column; gap:6px;
+    font-family:var(--mono); font-size:0.6rem; text-transform:uppercase; color:rgba(36,27,20,0.4);
+  }
+  .polaroid .cap{
+    position:absolute; bottom:10px; left:14px; right:14px; text-align:center;
+    font-family:var(--display); font-style:italic; font-size:0.8rem; color:rgba(36,27,20,0.55);
+  }
+  .polaroid.p1{top:0; left:10px; transform:rotate(-7deg);}
+  .polaroid.p2{top:30px; left:140px; transform:rotate(5deg);}
+  .polaroid.p3{top:190px; left:0; transform:rotate(4deg);}
+  .polaroid.p4{top:210px; left:150px; transform:rotate(-4deg);}
+  .polaroid.p5{top:380px; left:70px; transform:rotate(8deg);}
+  .early-life-text{font-size:1.04rem; line-height:1.8; color:rgba(36,27,20,0.78);}
+  .early-life-text h3{font-family:var(--display); font-weight:600; font-size:clamp(1.6rem,3.2vw,2.2rem); margin:0 0 18px; letter-spacing:-0.01em;}
+  .early-life-text p{margin:0 0 16px;}
+  .early-life-text [contenteditable]:focus{background:rgba(209,75,63,0.05); border-radius:8px; outline:none;}
+  @media (max-width:860px){
+    .early-life{grid-template-columns:1fr;}
+    .polaroid-stack{height:420px; max-width:340px; margin:0 auto;}
+  }
+
+  /* ---------- MY STORY: teaching journey, 3 mood sections ---------- */
+  .journey-intro{max-width:680px; margin-bottom:10px;}
+  .journey-intro h3{font-family:var(--display); font-weight:600; font-size:clamp(1.7rem,3.4vw,2.4rem); margin:0 0 10px; letter-spacing:-0.01em;}
+  .journey-intro p{font-size:1rem; color:rgba(36,27,20,0.68); line-height:1.65;}
+
+  .mood-step{
+    margin:30px calc(-5.5vw) 0; padding:9vh 5.5vw; position:relative; overflow:hidden;
+  }
+  .mood-step .step-kicker{
+    font-family:var(--mono); font-size:0.74rem; text-transform:uppercase; letter-spacing:.08em;
+    margin-bottom:14px; display:inline-block;
+  }
+  .mood-step h4{font-family:var(--display); font-weight:700; font-size:clamp(1.8rem,4vw,3rem); margin:0 0 18px; letter-spacing:-0.01em;}
+  .mood-step .mood-grid{display:grid; grid-template-columns:1fr 1fr; gap:44px; align-items:center;}
+  .mood-step p.mood-text{font-size:1.06rem; line-height:1.8;}
+  .mood-photo{
+    aspect-ratio:4/3; border-radius:20px; display:flex; align-items:center; justify-content:center;
+    flex-direction:column; gap:8px; font-family:var(--mono); font-size:0.66rem; text-transform:uppercase;
+    letter-spacing:.04em; cursor:pointer; transition:transform .2s;
+  }
+  @media (max-width:860px){ .mood-step .mood-grid{grid-template-columns:1fr;} }
+
+  /* Step 1 — joyful / childish */
+  .mood-step.joy{
+    background:linear-gradient(135deg,#FFE39A 0%, #FFB4A2 45%, #8FD9C4 100%);
+    border-radius:32px; color:#2A2014;
+  }
+  .mood-step.joy .step-kicker{background:rgba(255,255,255,0.6); color:#B5471F; padding:6px 14px; border-radius:20px;}
+  .mood-step.joy h4{font-style:italic; text-shadow:2px 2px 0 rgba(255,255,255,0.4);}
+  .mood-step.joy .mood-photo{background:rgba(255,255,255,0.55); border:3px dashed rgba(255,255,255,0.9); color:#7A4B2A; transform:rotate(-2deg);}
+  .mood-step.joy .mood-photo:hover{transform:rotate(0deg) scale(1.03);}
+  .mood-step.joy .deco{position:absolute; font-size:2.2rem; opacity:0.7;}
+
+  /* Step 2 — dark / gloomy */
+  .mood-step.gloom{
+    background:#15110D; color:#C9BFB4; border-radius:32px;
+  }
+  .mood-step.gloom .step-kicker{background:rgba(255,255,255,0.06); color:#C0746B; padding:6px 14px; border-radius:20px;}
+  .mood-step.gloom h4{color:#E8E2D8; font-weight:500; font-style:italic;}
+  .mood-step.gloom p.mood-text{color:#9C9388;}
+  .mood-step.gloom .mood-photo{background:rgba(255,255,255,0.03); border:2px dashed rgba(255,255,255,0.15); color:#6E665C;}
+
+  /* Step 3 — joyful but mature */
+  .mood-step.meaning{
+    background:linear-gradient(160deg,#2E3B36 0%, #4A4030 55%, #8C5A3C 100%); color:#EFE6D8; border-radius:32px;
+  }
+  .mood-step.meaning .step-kicker{background:rgba(255,255,255,0.1); color:#E3B06C; padding:6px 14px; border-radius:20px;}
+  .mood-step.meaning h4{color:#F4E9D6;}
+  .mood-step.meaning p.mood-text{color:#D8CDB9;}
+  .mood-step.meaning .mood-photo{background:rgba(255,255,255,0.06); border:2px dashed rgba(244,233,214,0.3); color:#D8CDB9;}
+
+  .story-cta{
+    margin-top:7vh; padding:5vh 0; text-align:center; display:flex; flex-direction:column; align-items:center; gap:18px;
+  }
+  .story-cta p{font-size:1.02rem; color:rgba(36,27,20,0.68); max-width:440px; line-height:1.6; margin:0;}
+  .story-cta-btn{
+    font-family:var(--display); font-weight:600; font-size:1.05rem;
+    background:var(--red); color:var(--white); border:none; padding:16px 34px;
+    border-radius:30px; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:10px;
+    transition:transform .2s, box-shadow .2s;
+  }
+  .story-cta-btn:hover{transform:translateY(-2px); box-shadow:0 10px 24px rgba(168,40,31,0.3);}
+
+  /* ---------- CONTACT ---------- */
+  .contact-wrap{max-width:620px;}
+  .contact-wrap h2{font-family:var(--display); font-weight:600; font-size:clamp(1.8rem,3.2vw,2.5rem); margin:0 0 16px; letter-spacing:-0.01em;}
+  .contact-row{margin-top:26px; display:flex; flex-direction:column; gap:10px;}
+  .contact-link{
+    display:flex; justify-content:space-between; align-items:center;
+    font-family:var(--display); font-weight:500; font-size:1rem;
+    padding:18px 24px; border-radius:18px; background:var(--white); border:1px solid var(--line);
+    text-decoration:none; color:var(--ink); transition:all .2s;
+  }
+  .contact-link:hover{background:var(--red); color:var(--white); border-color:var(--red); transform:translateX(4px);}
+  .contact-link span:last-child{font-size:1.2rem;}
+
+  /* ---------- CASE STUDY DETAIL ---------- */
+  .study-header{padding:6vh 5.5vw 4vh;}
+  .back-link{
+    font-family:var(--mono); font-size:0.72rem; text-transform:uppercase; letter-spacing:.06em;
+    color:var(--red-deep); text-decoration:none; display:inline-flex; align-items:center; gap:6px;
+    margin-bottom:20px; background:rgba(209,75,63,0.1); padding:7px 14px; border-radius:20px;
+  }
+  .study-header h1{font-family:var(--display); font-weight:600; font-size:clamp(2rem,4.6vw,3.3rem); margin:0; letter-spacing:-0.01em;}
+  .study-header .study-tags{margin-top:16px; display:flex; gap:10px;}
+  .study-header .study-tags span{
+    font-family:var(--mono); font-size:0.7rem; text-transform:uppercase; letter-spacing:.04em; color:var(--red-deep);
+    background:rgba(209,75,63,0.1); padding:6px 12px; border-radius:16px;
+  }
+
+  .story-block{
+    display:grid; grid-template-columns:1fr 1fr; gap:44px; align-items:center;
+    padding:5vh 5.5vw;
+  }
+  .story-block.reverse .visual{order:2;}
+  .story-block.reverse .text{order:1;}
+  .visual{
+    aspect-ratio:4/3; background:var(--white); border-radius:22px; border:2px dashed var(--line);
+    display:flex; align-items:center; justify-content:center; flex-direction:column; gap:10px;
+    font-family:var(--mono); font-size:0.7rem; color:rgba(36,27,20,0.4); text-align:center; padding:20px;
+    cursor:zoom-in; transition:transform .2s, border-color .25s;
+  }
+  .visual:hover{border-color:var(--red); transform:translateY(-3px);}
+  .text .step-label{
+    font-family:var(--mono); font-size:0.72rem; text-transform:uppercase; letter-spacing:.06em; color:var(--red-deep);
+    margin-bottom:10px; display:inline-block; background:rgba(209,75,63,0.1); padding:5px 12px; border-radius:14px;
+  }
+  .text h3{font-family:var(--display); font-weight:600; font-size:1.5rem; margin:0 0 14px; letter-spacing:-0.005em;}
+  .text p{line-height:1.75; color:rgba(36,27,20,0.75);}
+  @media (max-width:760px){
+    .story-block{grid-template-columns:1fr;}
+    .story-block.reverse .visual{order:1;} .story-block.reverse .text{order:2;}
+  }
+
+  #zoom-modal{
+    position:fixed; inset:0; background:rgba(36,27,20,0.85); z-index:2000;
+    display:none; align-items:center; justify-content:center; padding:6vw;
+  }
+  #zoom-modal.active{display:flex;}
+  .zoom-box{
+    background:var(--cream); border-radius:24px; max-width:900px; width:100%; aspect-ratio:16/10;
+    display:flex; align-items:center; justify-content:center; flex-direction:column; gap:14px;
+    font-family:var(--mono); color:rgba(36,27,20,0.5);
+  }
+
+  footer{padding:30px 5.5vw; font-family:var(--mono); font-size:0.7rem; color:rgba(36,27,20,0.5); display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;}
+  footer a{text-decoration:none; color:var(--red-deep);}
+
+  .reveal{opacity:0; transform:translateY(18px); transition:opacity .5s ease, transform .5s ease;}
+  .reveal.in{opacity:1; transform:translateY(0);}
+</style>
+</head>
+<body>
+
+<div id="ruler"></div>
+
+<aside>
+  <div>
+    <div class="brand" data-nav="home">Your Name<span class="dot">.</span></div>
+    <div class="brand-role">Learning Ops &amp; Customer Ed</div>
+  </div>
+  <button id="menu-toggle">Menu</button>
+  <nav id="main-nav">
+    <ol>
+      <li><a href="#" data-nav="home" class="active"><span class="emoji">🏠</span>Home</a></li>
+      <li><a href="#" data-nav="work"><span class="emoji">🧩</span>Work</a></li>
+      <li><a href="#" data-nav="story"><span class="emoji">✨</span>My Story</a></li>
+      <li><a href="#" data-nav="contact"><span class="emoji">💬</span>Contact</a></li>
+    </ol>
+  </nav>
+  <div class="sidebar-foot">
+    Based in <span class="loc">Tokyo</span><br>
+    Lived in <span class="loc">TR · US · IT · JP</span><br>
+    Speak <span class="loc">TR · EN · JP · IT</span> + basic RU<br>
+    © 2026 — local prototype
+  </div>
+</aside>
+
+<main>
+
+  <div class="view active" id="view-home">
+    <section class="hero">
+      <span class="index-no">👋 Learning Ops · Customer Education · Instructional Design</span>
+      <div class="hero-row">
+        <div>
+          <h1>I build the systems that make learning <em>work</em> for the people stuck running it.</h1>
+          <p class="sub">My background's in instructional design, but most of what I end up fixing sits underneath the lessons: the scheduling, the data, the parent communication nobody budgeted time for. I grew up moving between cultures and now build for schools and teams who deal with the same kind of complexity. Currently in Japan, after stretches in the US and Italy.</p>
+        </div>
+        <div class="hero-photo" data-headshot>
+          <div style="font-size:1.6rem;">📷</div>
+          <div>Add photo</div>
+        </div>
+      </div>
+      <div class="discipline-tags">
+        <span class="tag primary">Learning Operations</span>
+        <span class="tag primary">Customer Education</span>
+        <span class="tag">Instructional Design</span>
+      </div>
+    </section>
+
+    <section>
+      <span class="index-no">📊 At a glance</span>
+      <div class="stats-wrap">
+        <div class="stat-card"><div class="num">150+</div><div class="label">Students across systems I've built</div></div>
+        <div class="stat-card"><div class="num">+25</div><div class="label">Net-new students in 3 months from a marketing push</div></div>
+        <div class="stat-card"><div class="num">80%</div><div class="label">Adoption rate on a teacher logging tool</div></div>
+        <div class="stat-card"><div class="num">5</div><div class="label">Languages — TR, EN, JP, IT, basic RU</div></div>
+      </div>
+    </section>
+
+    <section>
+      <span class="index-no">🧩 Selected work</span>
+      <div class="tiles" id="home-tiles"></div>
+    </section>
+  </div>
+
+  <div class="view" id="view-work">
+    <section>
+      <div class="work-intro">
+        <span class="index-no">🧩 Work</span>
+        <h2>Four systems I've built, all solving the same underlying problem.</h2>
+      </div>
+      <div class="tiles" id="work-tiles"></div>
+    </section>
+  </div>
+
+  <div class="view" id="view-story">
+    <section>
+      <div class="story-hero-img" data-headshot>
+        <div style="font-size:2rem;">📷</div>
+        <div>Hero photo — add yours here</div>
+      </div>
+
+      <h1 class="story-headline">
+        <span class="sz-a">This is</span><br>
+        <span class="sz-c">my story</span><span class="sz-b">, start to finish.</span>
+      </h1>
+      <p class="story-hero-sub" contenteditable="true">From a fencing strip in Turkey to building learning systems in Japan — replace this line with your own opening, the one sentence that sets the tone for everything below.</p>
+
+      <!-- ===== EARLY LIFE ===== -->
+      <div class="early-life">
+        <div class="polaroid-stack">
+          <div class="polaroid p1" data-headshot><div class="frame">📷</div><div class="cap">fencing</div></div>
+          <div class="polaroid p2" data-headshot><div class="frame">📷</div><div class="cap">UWC Adriatic</div></div>
+          <div class="polaroid p3" data-headshot><div class="frame">📷</div><div class="cap">Trieste</div></div>
+          <div class="polaroid p4" data-headshot><div class="frame">📷</div><div class="cap">UVM</div></div>
+        </div>
+        <div class="early-life-text">
+          <span class="index-no">🤺 Early life</span>
+          <h3>Fencing, UWC, and finding my way to psychology</h3>
+          <div contenteditable="true">
+            <p>This is where the fencing strip, UWC Adriatic, and UVM all live together as one stretch of your life — not three separate chapters, just the years that shaped how you see people and competition and difference. Write it as one flowing story: what fencing for the Turkish national team taught you, how UWC cracked open your sense of the world, and why psychology (and keeping Italian alive) made sense by the time you got to Vermont.</p>
+            <p>Click into this text and write the real version — five photos are stacked to the left like polaroids on a table, click any of them to swap in the real thing.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== TEACHING JOURNEY ===== -->
+      <div class="journey-intro">
+        <span class="index-no">📚 The teaching years</span>
+        <h3>Three stages of falling in, falling apart, and finding my footing</h3>
+        <p contenteditable="true">After Vermont came a stretch as a home therapist for kids with ASD, then the move to Japan — and that's where teaching really started. It didn't go in a straight line. Here's the honest shape of it.</p>
+      </div>
+
+      <div class="mood-step joy reveal">
+        <span class="deco" style="top:8%; left:6%;">✨</span>
+        <span class="deco" style="top:70%; left:88%;">🎈</span>
+        <span class="deco" style="top:15%; left:90%;">🌟</span>
+        <span class="step-kicker">Step one — the honeymoon</span>
+        <h4>I fell in love with the idea of it.</h4>
+        <div class="mood-grid">
+          <p class="mood-text" contenteditable="true">Write about the early excitement here — the curiosity, the feeling of wanting to learn and grow, the optimism before reality set in. Keep the tone light and genuine; this is the part of the story before anything got hard.</p>
+          <div class="mood-photo" data-headshot><div style="font-size:1.5rem;">📷</div><div>Add a photo</div></div>
+        </div>
+      </div>
+
+      <div class="mood-step gloom reveal">
+        <span class="step-kicker">Step two — the reality check</span>
+        <h4>Then I saw what the field actually runs on.</h4>
+        <div class="mood-grid">
+          <p class="mood-text" contenteditable="true">Write the honest version here — long hours, small funding, tired teachers, burnout, mismanagement. This is the section that's allowed to be heavy. Don't soften it for the sake of the portfolio; the contrast with step one and step three is the point.</p>
+          <div class="mood-photo" data-headshot><div style="font-size:1.4rem;">📷</div><div>Optional photo</div></div>
+        </div>
+      </div>
+
+      <div class="mood-step meaning reveal">
+        <span class="step-kicker">Step three — finding meaning</span>
+        <h4>And then I started fixing it instead of just feeling it.</h4>
+        <div class="mood-grid">
+          <p class="mood-text" contenteditable="true">Write about where the meaning actually showed up — not the naive hope from step one, but something steadier: choosing to work on the systems instead of just absorbing the frustration. This is the bridge into the case studies in your Work section.</p>
+          <div class="mood-photo" data-headshot><div style="font-size:1.4rem;">📷</div><div>Optional photo</div></div>
+        </div>
+      </div>
+
+      <div class="story-cta">
+        <p>That's the path that got me here. The work below is where it landed.</p>
+        <a href="#" class="story-cta-btn" data-nav="work">See how this shows up in my work →</a>
+      </div>
+
+    </section>
+  </div>
+
+  <div class="view" id="view-contact">
+    <section>
+      <div class="contact-wrap">
+        <span class="index-no">💬 Contact</span>
+        <h2>Let's talk about a project.</h2>
+        <p style="line-height:1.75; color:rgba(36,27,20,0.75);">I'm open to roles and project work in learning operations, customer education, and instructional design — reach out if something seems like a fit.</p>
+        <div class="contact-row">
+          <a href="mailto:you@example.com" class="contact-link"><span>Email</span><span>↗</span></a>
+          <a href="#" class="contact-link"><span>LinkedIn</span><span>↗</span></a>
+          <a href="#" class="contact-link"><span>Résumé (PDF)</span><span>↗</span></a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="view" id="view-study">
+    <div class="study-header">
+      <a href="#" class="back-link" data-nav="work">← Back to work</a>
+      <h1 id="study-title">Case Study Title</h1>
+      <div class="study-tags" id="study-tags"></div>
+    </div>
+    <div id="study-body"></div>
+  </div>
+
+</main>
+
+<footer>
+  <div>© 2026 Your Name — Prototype build, local only.</div>
+  <a href="#" data-nav="contact">Get in touch ↗</a>
+</footer>
+
+<div id="zoom-modal">
+  <div class="zoom-box">
+    <div style="font-size:1.6rem;">⤢</div>
+    <div id="zoom-label">Diagram placeholder — replace with real image</div>
+  </div>
+</div>
+
+<script>
+const TILE_COLORS = ["#D14B3F","#D99A4E","#A8281F","#E8866F"];
+
+const CASE_STUDIES = [
+  {
+    id: "line-automation",
+    num: "01",
+    title: "LINE Communication & Workflow Automation",
+    type: "Learning Operations",
+    loc: "Japan",
+    summary: "A 9-step email loop for scheduling makeup lessons now runs through LINE and resolves in under a minute.",
+    steps: [
+      { label:"01 — Problem", title:"Nine steps, all done by hand", body:"At KANA English School, every absence or makeup request went through the same email chain: check the site, email a request, wait for staff to check availability, wait again for a teacher consult, get a confirmation, confirm back, and hope someone records it correctly. About 35 of these came in per week across 150 students and 100+ families. On a normal weekday that loop ate up 20+ hours; over a weekend, closer to 30, since the school was closed Sundays. Only staff with strong Japanese could even handle the requests, and because different part-timers picked up different threads, the same conversation would get answered twice or dropped entirely.", reverse:false },
+      { label:"02 — Process", title:"Stop fighting the channel parents already use", body:"A survey of parents found 74 of them wanted LINE instead of email, and 43 said the makeup process itself was confusing. So instead of building a separate scheduling app, I built the whole flow inside LINE using LIFF, which lets a custom interface open right inside the chat — no download, no new login. Make.com handles everything behind it: checking a student's identity, pulling live class capacity, preventing two parents from grabbing the same open seat, and even managing credit balances for adult students who pay per lesson.", reverse:true },
+      { label:"03 — Outcome", title:"Days down to under a minute", body:"About 70% of parents signed up within the first two weeks. The part that used to take a staff member 10 minutes of manually cross-checking schedules now finishes in under three seconds, and a parent can submit a request, get confirmation, and be done in under a minute total. Staff time went back to the things that actually need a person — not schedule lookups.", reverse:false }
+    ]
+  },
+  {
+    id: "churn-study",
+    num: "02",
+    title: "Parent Retention & Customer Education",
+    type: "Customer Education",
+    loc: "Japan",
+    summary: "Parents thought their kids weren't learning English. The kids were — just not where anyone could see it.",
+    steps: [
+      { label:"01 — Problem", title:"The progress was real. Parents just couldn't see it.", body:"After more than 30 parent interviews, a pattern showed up everywhere: kids spoke English at school and reverted to their home language the second they walked in the door, because that's just where their identity as a kid lived. To a parent watching from outside, that looked like zero progress, even though teachers were marking most students as on track. Thirteen of 36 parents brought up some version of the same complaint, almost word for word: their kid couldn't even tell them what happened in class that day.", reverse:false },
+      { label:"02 — Process", title:"Give the work somewhere to live outside the classroom", body:"Three things came out of this. First, an \"Output Relay\" where students teach the lesson back to a parent at home — turns the kid into the expert instead of the passive recipient, and it had 89% participation in week one. Second, short video explainers in the parent's native language sitting right next to the homework, so a parent who doesn't speak English can still actually help. Third, a flexible observation option — in person or over Google Meet — replacing a single rigid observation week that most working parents couldn't make anyway.", reverse:true },
+      { label:"03 — Outcome", title:"Fewer complaints, more parents showing up", body:"Since the Output Relay started, there hasn't been a single complaint about a kid forgetting what happened in class. Homework completion went up 30%, and the listening sections — previously the part everyone just skipped — jumped 45%. Observation attendance nearly tripled, from roughly 20-25 parents a year to 43 in the first cycle alone, close to a third of the whole school.", reverse:false },
+      { label:"04 — What's next", title:"From retention to growth", body:"With the trust gap closing, the focus shifted from stopping churn to actively growing enrollment. A targeted marketing push added 25 net-new students in 3 months, and the school is on track for roughly 1.5x total enrollment — about 60 additional students — by next April.", reverse:true }
+    ]
+  },
+  {
+    id: "kana-progress-tracking",
+    num: "03",
+    title: "Student Progress Tracking System",
+    type: "Learning Operations",
+    loc: "Japan",
+    summary: "A logging tool for teachers that had to survive three rebuilds before it actually got used.",
+    steps: [
+      { label:"01 — Problem", title:"Everyone had an opinion. Nobody had data.", body:"Teachers and parents disagreed constantly about how a student was doing, and there was nothing written down to settle it either way. The real constraint, the one that shaped everything after: teachers get about 8 minutes between classes, and that time is already spoken for — talking to parents on the way out, resetting the room, greeting whoever's coming in next. Anything that asked for more than a minute or two just wasn't going to get used, no matter how good the idea was.", reverse:false },
+      { label:"02 — Process", title:"Two failed versions before this one stuck", body:"The first attempt was a Google Sheet with dropdown menus — fine on paper, miserable on a phone, and teachers hated scrolling through it. The second was a proper web app with charts, which was better, but teachers still had to go find the day's class manually, and once the novelty wore off, usage quietly dropped. The version that finally worked uses a QR code at each station that opens straight into whatever class is happening right now, detected automatically by the time. Everything saves to Supabase in real time, and it only asks teachers to log students who stood out — not a full roll call every time.", reverse:true },
+      { label:"03 — Outcome", title:"80% adoption, under a minute a class", body:"128 of 160 classes got logged within the first month, an 80% adoption rate, and teachers were spending maybe 5 minutes total across an entire day. The data ended up surfacing something nobody had noticed: engagement consistently dropped for kindergarten classes and for high schoolers, which gave management something concrete to bring into parent conversations instead of relying on whoever happened to remember what.", reverse:false }
+    ]
+  },
+  {
+    id: "lifehack-curriculum",
+    num: "04",
+    title: "Lifehack: Financial Literacy Curriculum",
+    type: "Instructional Design",
+    loc: "Japan",
+    summary: "A trading game built around how Japanese teenagers actually behave in a group, instead of fighting it.",
+    steps: [
+      { label:"01 — Problem", title:"Built by finance people, for teenagers who tune out fast", body:"Most financial literacy material in Japan gets written by people with finance or policy backgrounds, not teaching backgrounds, and it shows — dense, jargon-heavy, and easy to disengage from. On top of that, instructors tend to either overcorrect for Japanese students' reluctance to speak up in public, or ignore it completely and put kids on the spot, and both approaches backfire in their own way.", reverse:false },
+      { label:"02 — Process", title:"Split the round so nobody can hide and nobody gets singled out", body:"Each round runs five minutes, split into two phases. First, an open market window where students trade individually and quietly, low stakes, no pressure to talk. Then a strategy window where the group has to agree on one trade together before time runs out, which forces a conversation that wouldn't happen on its own. The logic comes from Chi and Wylie's ICAP framework — individual action gets you interactive engagement, the forced group decision gets you constructive engagement — and nobody's ever called out by name in front of the room.", reverse:true },
+      { label:"03 — Outcome", title:"Built so any facilitator can run it the same way", body:"The module comes with a full facilitator script: exact lines for a silent group, for one student dominating the conversation, for a group that can't agree before time's up. It also has a 3-tier rubric and an anonymous reflection prompt students answer before the group discussion starts, so the activity doesn't depend on one particularly good facilitator to land.", reverse:false }
+    ]
+  }
+];
+
+function tileHTML(cs, idx){
+  const color = TILE_COLORS[idx % TILE_COLORS.length];
+  return `
+    <div class="tile reveal" data-study="${cs.id}">
+      <div class="badge" style="background:${color};">${cs.num}</div>
+      <div class="info">
+        <h3>${cs.title}</h3>
+        <div class="desc">${cs.summary}</div>
+        <div class="chips"><span>${cs.type}</span><span>${cs.loc}</span></div>
+      </div>
+      <div class="go">→</div>
+    </div>`;
+}
+document.getElementById("home-tiles").innerHTML = CASE_STUDIES.map((c,i)=>tileHTML(c,i)).join("");
+document.getElementById("work-tiles").innerHTML = CASE_STUDIES.map((c,i)=>tileHTML(c,i)).join("");
+
+function openStudy(id){
+  const cs = CASE_STUDIES.find(c=>c.id===id);
+  if(!cs) return;
+  document.getElementById("study-title").textContent = cs.title;
+  document.getElementById("study-tags").innerHTML = `<span>${cs.type}</span><span>${cs.loc}</span>`;
+  document.getElementById("study-body").innerHTML = cs.steps.map(s=>`
+    <div class="story-block ${s.reverse ? 'reverse':''}">
+      <div class="visual" data-zoom="${s.title}">
+        <div style="font-size:1.4rem;">⤢</div>
+        <div>${s.title} — diagram/photo<br>click to preview</div>
+      </div>
+      <div class="text">
+        <span class="step-label">${s.label}</span>
+        <h3>${s.title}</h3>
+        <p>${s.body}</p>
+      </div>
+    </div>
+  `).join("");
+  showView("study");
+  window.scrollTo({top:0});
+}
+
+function showView(name){
+  document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
+  document.getElementById("view-"+name).classList.add("active");
+  document.querySelectorAll("nav a").forEach(a=>a.classList.remove("active"));
+  document.querySelectorAll(`nav a[data-nav="${name}"]`).forEach(a=>a.classList.add("active"));
+  document.getElementById("main-nav").classList.remove("open");
+  initReveal();
+}
+document.querySelectorAll("[data-nav]").forEach(el=>{
+  el.addEventListener("click", e=>{
+    e.preventDefault();
+    showView(el.getAttribute("data-nav"));
+    window.scrollTo({top:0, behavior:"smooth"});
+  });
+});
+document.body.addEventListener("click", e=>{
+  const tile = e.target.closest(".tile");
+  if(tile) openStudy(tile.getAttribute("data-study"));
+});
+document.getElementById("menu-toggle").addEventListener("click", ()=>{
+  document.getElementById("main-nav").classList.toggle("open");
+});
+
+document.body.addEventListener("click", e=>{
+  const v = e.target.closest(".visual");
+  if(v){
+    document.getElementById("zoom-label").textContent = v.getAttribute("data-zoom") + " — full-size preview placeholder";
+    document.getElementById("zoom-modal").classList.add("active");
+  } else if(e.target.id === "zoom-modal"){
+    document.getElementById("zoom-modal").classList.remove("active");
+  }
+});
+
+document.body.addEventListener("click", e=>{
+  if(e.target.closest("[data-headshot]")){
+    if(e.target.closest("[contenteditable]")) return;
+    alert("Drop your real photo file here once you have one — replace this placeholder div with an <img> tag pointing to it.");
+  }
+});
+
+const ruler = document.getElementById("ruler");
+window.addEventListener("mousemove", e=>{ ruler.style.top = e.clientY + "px"; });
+
+function initReveal(){
+  document.querySelectorAll(".reveal").forEach(el=>{
+    const rect = el.getBoundingClientRect();
+    if(rect.top < window.innerHeight*0.9) el.classList.add("in");
+  });
+}
+const observer = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add("in"); });
+},{threshold:0.1});
+function observeAll(){ document.querySelectorAll(".reveal").forEach(el=>observer.observe(el)); }
+observeAll();
+initReveal();
+</script>
+
+</body>
+</html>
