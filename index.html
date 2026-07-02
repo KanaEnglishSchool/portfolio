@@ -31,16 +31,6 @@
   ::selection{background:var(--red); color:var(--cream);}
   a{color:inherit;}
 
-  #ruler{
-    position:fixed; left:0; right:0; height:2px; background:var(--red);
-    top:0; pointer-events:none; z-index:9999; opacity:0.28; border-radius:2px;
-  }
-  #ruler::before{
-    content: ''; position:absolute; right:14px; top:-5px; width:12px; height:12px;
-    background:var(--red); border-radius:50%;
-  }
-  @media (max-width:860px){ #ruler{display:none;} }
-
   aside{
     position:fixed; top:0; left:0; bottom:0; width:var(--sidebar-w);
     background:var(--white);
@@ -151,6 +141,7 @@
     font-family:var(--display); font-weight:700; font-size:1.2rem; color:var(--white);
   }
   .tile .info{flex:1; min-width:0;}
+  .tile .tile-meta{font-family:var(--mono); font-size:0.65rem; text-transform:uppercase; letter-spacing:.05em; color:rgba(36,27,20,0.4); margin-bottom:5px;}
   .tile h3{font-family:var(--display); font-weight:600; font-size:clamp(1.15rem,2vw,1.4rem); margin:0 0 6px;}
   .tile .desc{font-size:0.88rem; color:rgba(36,27,20,0.6); line-height:1.5; max-width:560px;}
   .tile .chips{display:flex; gap:8px; margin-top:10px; flex-wrap:wrap;}
@@ -158,6 +149,12 @@
     font-family:var(--mono); font-size:0.66rem; text-transform:uppercase; letter-spacing:.04em;
     background:rgba(36,27,20,0.05); padding:4px 10px; border-radius:14px; color:rgba(36,27,20,0.6);
   }
+  .tile-demo{
+    font-family:var(--mono); font-size:0.66rem; text-transform:uppercase; letter-spacing:.04em;
+    background:var(--red); color:var(--white); padding:4px 12px; border-radius:14px;
+    text-decoration:none; transition:background .2s;
+  }
+  .tile-demo:hover{background:var(--red-deep);}
   .tile .go{font-family:var(--display); font-size:1.5rem; color:var(--red); transition:transform .2s;}
   .tile:hover .go{transform:translateX(6px);}
   @media (max-width:600px){ .tile{flex-wrap:wrap;} .tile .go{display:none;} }
@@ -346,8 +343,6 @@
 </head>
 <body>
 
-<div id="ruler"></div>
-
 <aside>
   <div>
     <div class="brand" data-nav="home">Your Name<span class="dot">.</span></div>
@@ -366,6 +361,7 @@
     Based in <span class="loc">Tokyo</span><br>
     Lived in <span class="loc">TR · US · IT · JP</span><br>
     Speak <span class="loc">TR · EN · JP · IT</span> + basic RU<br>
+    <a href="https://www.linkedin.com/in/murat-titiz-44533416b" target="_blank" rel="noopener" style="color:var(--red-deep); text-decoration:none; font-weight:600;">LinkedIn ↗</a><br>
     © 2026 — local prototype
   </div>
 </aside>
@@ -395,10 +391,16 @@
     <section>
       <span class="index-no">📊 At a glance</span>
       <div class="stats-wrap">
-        <div class="stat-card"><div class="num">150+</div><div class="label">Students across systems I've built</div></div>
-        <div class="stat-card"><div class="num">+25</div><div class="label">Net-new students in 3 months from a marketing push</div></div>
-        <div class="stat-card"><div class="num">80%</div><div class="label">Adoption rate on a teacher logging tool</div></div>
-        <div class="stat-card"><div class="num">5</div><div class="label">Languages — TR, EN, JP, IT, basic RU</div></div>
+        <div class="stat-card"><div class="num">250+</div><div class="label">Learners served across instructional programs and operational systems</div></div>
+        <div class="stat-card"><div class="num">~100%</div><div class="label">Staff adoption of an in-house lesson tracking tool, built and iterated from scratch</div></div>
+        <div class="stat-card"><div class="num">90%</div><div class="label">Parent adoption of a custom LMS communication system for scheduling and support</div></div>
+        <div class="stat-card"><div class="num">87%</div><div class="label">Sustained engagement with a parent-involvement program designed to extend learning beyond the classroom</div></div>
+        <div class="stat-card"><div class="num">100+</div><div class="label">Learning assets produced — curriculum explainers, onboarding materials, and a full instructor guide</div></div>
+        <div class="stat-card"><div class="num">5</div><div class="label">Languages — Turkish, English, Japanese, Italian, basic Russian</div></div>
+        <div class="stat-card" style="grid-column: 1 / -1;">
+          <div class="num" style="font-size:1.05rem; line-height:1.6; letter-spacing:0;">Articulate Rise &nbsp;·&nbsp; Figma &nbsp;·&nbsp; Moodle &nbsp;·&nbsp; Google UX/UI Design &nbsp;·&nbsp; Copyediting &nbsp;·&nbsp; ABA Therapy</div>
+          <div class="label">Tools &amp; certifications</div>
+        </div>
       </div>
     </section>
 
@@ -501,9 +503,9 @@
         <h2>Let's talk about a project.</h2>
         <p style="line-height:1.75; color:rgba(36,27,20,0.75);">I'm open to roles and project work in learning operations, customer education, and instructional design — reach out if something seems like a fit.</p>
         <div class="contact-row">
-          <a href="mailto:you@example.com" class="contact-link"><span>Email</span><span>↗</span></a>
-          <a href="#" class="contact-link"><span>LinkedIn</span><span>↗</span></a>
-          <a href="#" class="contact-link"><span>Résumé (PDF)</span><span>↗</span></a>
+          <a href="mailto:muratto.titiz@gmail.com" class="contact-link"><span>Email</span><span>↗</span></a>
+          <a href="https://www.linkedin.com/in/murat-titiz-44533416b" target="_blank" rel="noopener" class="contact-link"><span>LinkedIn</span><span>↗</span></a>
+          <a href="Murat_Titiz_Resume2026.pdf" target="_blank" class="contact-link"><span>Résumé (PDF)</span><span>↗</span></a>
         </div>
       </div>
     </section>
@@ -542,11 +544,12 @@ const CASE_STUDIES = [
     title: "LINE Communication & Workflow Automation",
     type: "Learning Operations",
     loc: "Japan",
+    tags: ["Process Automation", "Communication Design", "UX Research", "No-Code Tools"],
     summary: "A 9-step email loop for scheduling makeup lessons now runs through LINE and resolves in under a minute.",
     steps: [
       { label:"01 — Problem", title:"Nine steps, all done by hand", body:"At KANA English School, every absence or makeup request went through the same email chain: check the site, email a request, wait for staff to check availability, wait again for a teacher consult, get a confirmation, confirm back, and hope someone records it correctly. About 35 of these came in per week across 150 students and 100+ families. On a normal weekday that loop ate up 20+ hours; over a weekend, closer to 30, since the school was closed Sundays. Only staff with strong Japanese could even handle the requests, and because different part-timers picked up different threads, the same conversation would get answered twice or dropped entirely.", reverse:false },
       { label:"02 — Process", title:"Stop fighting the channel parents already use", body:"A survey of parents found 74 of them wanted LINE instead of email, and 43 said the makeup process itself was confusing. So instead of building a separate scheduling app, I built the whole flow inside LINE using LIFF, which lets a custom interface open right inside the chat — no download, no new login. Make.com handles everything behind it: checking a student's identity, pulling live class capacity, preventing two parents from grabbing the same open seat, and even managing credit balances for adult students who pay per lesson.", reverse:true },
-      { label:"03 — Outcome", title:"Days down to under a minute", body:"About 70% of parents signed up within the first two weeks. The part that used to take a staff member 10 minutes of manually cross-checking schedules now finishes in under three seconds, and a parent can submit a request, get confirmation, and be done in under a minute total. Staff time went back to the things that actually need a person — not schedule lookups.", reverse:false }
+      { label:"03 — Outcome", title:"Days down to under a minute, 90% adoption", body:"The LINE interface now sits at 90% adoption across the school's families — covering absence reporting, makeup scheduling, and general support requests. What used to take a staff member 10 minutes of manually cross-checking schedules finishes in under three seconds, and a parent can submit a request, get confirmation, and be done in under a minute total. Staff time went back to the things that actually need a person — not schedule lookups.", reverse:false }
     ]
   },
   {
@@ -555,12 +558,13 @@ const CASE_STUDIES = [
     title: "Parent Retention & Customer Education",
     type: "Customer Education",
     loc: "Japan",
+    tags: ["Retention Strategy", "Behaviour Change", "Content Production", "Stakeholder Communication"],
     summary: "Parents thought their kids weren't learning English. The kids were — just not where anyone could see it.",
     steps: [
       { label:"01 — Problem", title:"The progress was real. Parents just couldn't see it.", body:"After more than 30 parent interviews, a pattern showed up everywhere: kids spoke English at school and reverted to their home language the second they walked in the door, because that's just where their identity as a kid lived. To a parent watching from outside, that looked like zero progress, even though teachers were marking most students as on track. Thirteen of 36 parents brought up some version of the same complaint, almost word for word: their kid couldn't even tell them what happened in class that day.", reverse:false },
-      { label:"02 — Process", title:"Give the work somewhere to live outside the classroom", body:"Three things came out of this. First, an \"Output Relay\" where students teach the lesson back to a parent at home — turns the kid into the expert instead of the passive recipient, and it had 89% participation in week one. Second, short video explainers in the parent's native language sitting right next to the homework, so a parent who doesn't speak English can still actually help. Third, a flexible observation option — in person or over Google Meet — replacing a single rigid observation week that most working parents couldn't make anyway.", reverse:true },
-      { label:"03 — Outcome", title:"Fewer complaints, more parents showing up", body:"Since the Output Relay started, there hasn't been a single complaint about a kid forgetting what happened in class. Homework completion went up 30%, and the listening sections — previously the part everyone just skipped — jumped 45%. Observation attendance nearly tripled, from roughly 20-25 parents a year to 43 in the first cycle alone, close to a third of the whole school.", reverse:false },
-      { label:"04 — What's next", title:"From retention to growth", body:"With the trust gap closing, the focus shifted from stopping churn to actively growing enrollment. A targeted marketing push added 25 net-new students in 3 months, and the school is on track for roughly 1.5x total enrollment — about 60 additional students — by next April.", reverse:true }
+      { label:"02 — Process", title:"Give the work somewhere to live outside the classroom", body:"Three things came out of this. First, an \"Output Relay\" where students teach the lesson back to a parent at home — turns the kid into the expert instead of the passive recipient. Students earn a sticker per signed notebook entry, with a reward (game day, Pokémon cards) at the end of each unit, which keeps the habit sticky. Second, over 100 short video explainers built in the parent's native language and placed right next to the homework, so a parent who doesn't speak English can actually follow along and help. Third, a flexible observation option, in person or over Google Meet, replacing the single rigid observation week that most working parents couldn't make anyway.", reverse:true },
+      { label:"03 — Outcome", title:"87% sustained adoption, 30% jump in homework completion", body:"The Output Relay is now at 87% sustained adoption across the school — parents signing notebooks, students relaying lessons, the reward cycle running on its own. Since it launched there hasn't been a single complaint about a kid forgetting what happened in class. Homework completion rose 30% overall, with a 45% jump specifically in listening sections parents previously couldn't help with. Observation attendance nearly tripled, from roughly 20-25 parents a year to 43 in the first cycle, about a third of the whole school.", reverse:false },
+      { label:"04 — Supporting materials", title:"Onboarding, 100+ videos, and a full teacher manual", body:"Alongside the student-facing work, I built the internal infrastructure to make it all sustainable: an onboarding package for new families so they understand the school's systems from day one, over 100 curriculum and lesson-explanation videos for the parent library, and a full teacher manual covering lesson planning frameworks, class management approaches, and handover notes so incoming teachers can get up to speed without having to shadow someone for weeks.", reverse:true }
     ]
   },
   {
@@ -569,37 +573,45 @@ const CASE_STUDIES = [
     title: "Student Progress Tracking System",
     type: "Learning Operations",
     loc: "Japan",
+    tags: ["Data Systems", "Iterative Design", "Staff Adoption", "Learning Analytics"],
     summary: "A logging tool for teachers that had to survive three rebuilds before it actually got used.",
     steps: [
       { label:"01 — Problem", title:"Everyone had an opinion. Nobody had data.", body:"Teachers and parents disagreed constantly about how a student was doing, and there was nothing written down to settle it either way. The real constraint, the one that shaped everything after: teachers get about 8 minutes between classes, and that time is already spoken for — talking to parents on the way out, resetting the room, greeting whoever's coming in next. Anything that asked for more than a minute or two just wasn't going to get used, no matter how good the idea was.", reverse:false },
       { label:"02 — Process", title:"Two failed versions before this one stuck", body:"The first attempt was a Google Sheet with dropdown menus — fine on paper, miserable on a phone, and teachers hated scrolling through it. The second was a proper web app with charts, which was better, but teachers still had to go find the day's class manually, and once the novelty wore off, usage quietly dropped. The version that finally worked uses a QR code at each station that opens straight into whatever class is happening right now, detected automatically by the time. Everything saves to Supabase in real time, and it only asks teachers to log students who stood out — not a full roll call every time.", reverse:true },
-      { label:"03 — Outcome", title:"80% adoption, under a minute a class", body:"128 of 160 classes got logged within the first month, an 80% adoption rate, and teachers were spending maybe 5 minutes total across an entire day. The data ended up surfacing something nobody had noticed: engagement consistently dropped for kindergarten classes and for high schoolers, which gave management something concrete to bring into parent conversations instead of relying on whoever happened to remember what.", reverse:false }
+      { label:"03 — Outcome", title:"Near-100% adoption, all classes logged within 36 hours", body:"The tool is now at close to full adoption — every class gets logged within 36 hours of the lesson, and teachers spend maybe 5 minutes total across an entire day. The data ended up surfacing something nobody had noticed: engagement consistently dropped for kindergarten classes and for high schoolers, which gave management something concrete to bring into parent conversations instead of relying on whoever happened to remember what.", reverse:false }
     ]
   },
   {
     id: "lifehack-curriculum",
     num: "04",
     title: "Lifehack: Financial Literacy Curriculum",
-    type: "Instructional Design",
+    type: "Instructional Design · Program Management",
     loc: "Japan",
-    summary: "A trading game built around how Japanese teenagers actually behave in a group, instead of fighting it.",
+    tags: ["Curriculum Design", "Experiential Learning", "Stakeholder Management", "Facilitation Design"],
+    demoUrl: "https://kanaenglishschool.github.io/articulaterise/",
+    demoLabel: "View Articulate Rise module ↗",
+    summary: "A civil servant brought us the idea, then had to step back. I took the curriculum from concept to a live test run with real students.",
     steps: [
-      { label:"01 — Problem", title:"Built by finance people, for teenagers who tune out fast", body:"Most financial literacy material in Japan gets written by people with finance or policy backgrounds, not teaching backgrounds, and it shows — dense, jargon-heavy, and easy to disengage from. On top of that, instructors tend to either overcorrect for Japanese students' reluctance to speak up in public, or ignore it completely and put kids on the spot, and both approaches backfire in their own way.", reverse:false },
-      { label:"02 — Process", title:"Split the round so nobody can hide and nobody gets singled out", body:"Each round runs five minutes, split into two phases. First, an open market window where students trade individually and quietly, low stakes, no pressure to talk. Then a strategy window where the group has to agree on one trade together before time runs out, which forces a conversation that wouldn't happen on its own. The logic comes from Chi and Wylie's ICAP framework — individual action gets you interactive engagement, the forced group decision gets you constructive engagement — and nobody's ever called out by name in front of the room.", reverse:true },
-      { label:"03 — Outcome", title:"Built so any facilitator can run it the same way", body:"The module comes with a full facilitator script: exact lines for a silent group, for one student dominating the conversation, for a group that can't agree before time's up. It also has a 3-tier rubric and an anonymous reflection prompt students answer before the group discussion starts, so the activity doesn't depend on one particularly good facilitator to land.", reverse:false }
+      { label:"01 — Origin", title:"A civil servant walked in with an idea", body:"A local civil servant approached the school wanting a financial literacy program for teenagers in the area, and became a stakeholder on the project rather than just a requester. That shaped the whole thing from day one — this wasn't just an exercise designed on paper, it had to satisfy what a local government partner actually wanted delivered to real students in the community.", reverse:false },
+      { label:"02 — Building it", title:"Curriculum, recruiting, and clearing every real-world hurdle in the way", body:"With my staff, I built the curriculum from scratch: recruited the students, set the learning outcomes, and designed the learning experience itself. A good chunk of the actual work wasn't instructional design in the usual sense, it was making the stakeholder's more ambitious ideas actually possible. That meant getting a food hygiene certification so students could legally run a stall at a local festival, building a relationship with a tour guide so students could get real, hands-on service-industry experience using skills they already had, and setting up Mercari accounts so students could practice market research and pricing by actually selling things they already owned.", reverse:true },
+      { label:"03 — The setback", title:"The stakeholder had to step back — I took over delivery", body:"Partway through, the civil servant who initiated the project had to withdraw for health reasons. Rather than shelve the plan, I took over full delivery myself — running the test sessions and carrying the curriculum through to the students it was built for.", reverse:false },
+      { label:"04 — First trial run", title:"A proof-of-concept, built to test the idea before building the measurement", body:"The first run was a supermarket trading simulation with 9 students in 3 teams of 3. Before investing time in full instructor guides and tracking tools, I wanted to answer a simpler question: would students actually engage with a simulation-based approach, or would it fall flat like a lot of lecture-based financial literacy content does. Opening with \"what would you do with ¥100,000 right now\" surfaced a common misconception almost immediately — several students treated holding cash as risk-free. An e-learning module I built in Articulate Rise (<a href=\"https://kanaenglishschool.github.io/articulaterise/\" target=\"_blank\" rel=\"noopener\" style=\"color:var(--red-deep); font-weight:600;\">view the module ↗</a>) then let them find that flaw themselves: starting with a ¥10,000 grocery basket in 2020 and buying the same items in 2026, where purchasing power had dropped by almost half. All three teams grew their starting ¥2,000 (roughly 1.5x, 2x, and 3x), which told me my event cards were calibrated too generously rather than confirming a typical result — I've since adjusted them for a wider spread. Even with only 3-5 minutes for debrief, every team could answer specifically what worked, what didn't, and which trade mattered most, which told me the mechanics were clear enough for them to reconstruct their own reasoning afterward.", reverse:true },
+      { label:"05 — What's next", title:"A second trial, this time tactile and real", body:"The next run moves to the trading-floor version of the curriculum — a live, tactile session using real money and physical props instead of a supermarket-style simulation. It's built around Chi and Wylie's ICAP framework: an individual open-market phase where students trade quietly on their own, followed by a mandatory group strategy window that forces a shared decision, plus a full facilitator script for handling silent groups, dominating students, and deadlock votes. This run will stay mostly qualitative — I'm not yet sure how much of it I'll be able to turn into hard measurable outcomes this time. The plan for the run after that is to build in real measurement — a short pre/post knowledge check, an exit ticket for engagement, and structured participation tracking — so results can be reported with numbers instead of just description.", reverse:false }
     ]
   }
 ];
 
 function tileHTML(cs, idx){
   const color = TILE_COLORS[idx % TILE_COLORS.length];
+  const demoBtn = cs.demoUrl ? `<a href="${cs.demoUrl}" target="_blank" rel="noopener" class="tile-demo" onclick="event.stopPropagation()">${cs.demoLabel}</a>` : '';
   return `
     <div class="tile reveal" data-study="${cs.id}">
       <div class="badge" style="background:${color};">${cs.num}</div>
       <div class="info">
+        <div class="tile-meta">${cs.type} &nbsp;·&nbsp; ${cs.loc}</div>
         <h3>${cs.title}</h3>
         <div class="desc">${cs.summary}</div>
-        <div class="chips"><span>${cs.type}</span><span>${cs.loc}</span></div>
+        <div class="chips">${cs.tags.map(t=>`<span>${t}</span>`).join("")}${demoBtn}</div>
       </div>
       <div class="go">→</div>
     </div>`;
@@ -668,9 +680,6 @@ document.body.addEventListener("click", e=>{
     alert("Drop your real photo file here once you have one — replace this placeholder div with an <img> tag pointing to it.");
   }
 });
-
-const ruler = document.getElementById("ruler");
-window.addEventListener("mousemove", e=>{ ruler.style.top = e.clientY + "px"; });
 
 function initReveal(){
   document.querySelectorAll(".reveal").forEach(el=>{
